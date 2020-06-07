@@ -1,0 +1,10 @@
+<div class="daily-statistics">
+    <div
+        *ngFor="let item of DailyStatistics"
+        [ngClass]="{ 'daily-statistics__item': true, 'daily-statistics__item--success': item.success }"
+        [matTooltip]="item.date + ' (' + item.date + ')'"
+        matTooltipHideDelay="100"
+        #tooltip="matTooltip"
+        matTooltipPosition="above"
+    ></div>
+</div>
