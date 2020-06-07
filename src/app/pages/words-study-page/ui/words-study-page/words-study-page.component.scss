@@ -1,0 +1,148 @@
+@mixin button {
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    font-weight: 400;
+    text-align: center;
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    transition:
+        color .15s ease-in-out,
+        background-color .15s ease-in-out,
+        border-color .15s ease-in-out,
+        box-shadow .15s ease-in-out;
+    user-select: none;
+    cursor: pointer;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    max-width: 1280px;
+    height: inherit;
+    margin: 0 auto;
+
+    .row {
+        display: flex;
+    }
+
+    .col {
+        &:first-child {
+            flex: 1;
+        }
+    }
+}
+
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.words-study-page {
+    height: inherit;
+
+    .content {
+        flex: 1;
+
+        .col {
+            padding: 28px;
+            padding-left: 14px;
+            padding-right: 14px;
+
+            &:first-child {
+                padding-left: 28px;
+            }
+
+            &:last-child {
+                padding-right: 28px;
+            }
+
+        }
+    }
+}
+
+.word {
+    padding: 1.8rem 1.8rem 1rem;
+    box-shadow: 0 1px 4px 0 rgba(0,0,0,0.37);
+    border-radius: 8px;
+    
+    &__value {
+        min-height: 80px;
+        font-size: 24px;
+    }
+    
+    &__transcription {
+        font-size: 15px;
+        color: #777;
+    }
+
+    &__footer {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 1rem;
+    }
+}
+
+.word-controls {
+    display: flex;
+    color: #777;
+
+    & > * {
+        margin-left: 2rem;
+        cursor: pointer;
+
+        &:first-child {
+            margin-left: 0;
+        }
+    }
+}
+
+.word-statistics {
+    color: #777;
+    cursor: pointer;
+
+    &__success {
+        font-size: 2rem;
+    }
+
+    &__separator {
+        font-size: 1.5rem;
+    }
+}
+
+.association {
+    margin-top: 1.8rem;
+    padding: 1.8rem;
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+.answers {
+    .answers__button {
+        @include button;
+        width: 300px;
+        margin-top: .5rem;
+        color: #777;
+        border-color: #dadce0;
+
+        &:first-child {
+            margin-top: 0;
+        }
+
+        &:hover {
+            color: #fff;
+            background-color: #4285f4;
+            border-color: #4285f4;
+        }
+    }
+}
+
+.daily-statistisc {
+    padding: 28px;
+}
