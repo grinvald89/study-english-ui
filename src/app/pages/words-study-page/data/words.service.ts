@@ -41,7 +41,7 @@ export class WordsService {
      * @param wordId - идентификатор слова
      * @param isCorrect - идентификатор слова
      */
-    public sendAnswers(wordId: number, isCorrect: boolean): Observable<StudyHistoryDTO> {
+    public sendAnswers(wordId: number, isCorrect: boolean, isShowAssociation: boolean): Observable<StudyHistoryDTO> {
         const header: HttpHeaders = new HttpHeaders({
             'Content-Type': 'application/json'
         });
@@ -51,6 +51,7 @@ export class WordsService {
             {
                 WordId: wordId,
                 Correct: isCorrect,
+                ShowAssociation: isShowAssociation
             },
             {
                 headers: header

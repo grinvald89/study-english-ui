@@ -128,7 +128,7 @@ export class WordsStudyPageComponent implements OnInit, OnDestroy {
         this.Loaded = false;
 
         const isCorrect: boolean = answer.id === this.RightAnswer.id;
-        this.wordsService.sendAnswers(this.Word.id, isCorrect)
+        this.wordsService.sendAnswers(this.Word.id, isCorrect, this.ShowAssociation)
             .pipe(
                 takeUntil(this.destructor$),
                 finalize(() => this.Loaded = true)

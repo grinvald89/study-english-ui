@@ -15,6 +15,11 @@ export interface IStudyHistoryDTO {
     correct: boolean;
 
     /**
+     * True, если была показана ассоциация
+     */
+    showAssociation: boolean;
+
+    /**
      * Дата ответа
      */
     date: moment.Moment;
