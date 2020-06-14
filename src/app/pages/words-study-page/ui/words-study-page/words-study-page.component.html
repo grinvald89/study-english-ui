@@ -49,6 +49,7 @@
                                     matTooltipHideDelay="100"
                                     #tooltip="matTooltip"
                                     matTooltipPosition="above"
+                                    (click)="ShowAssociation = !ShowAssociation"
                                 >
                                     help
                                 </span>
@@ -68,7 +69,10 @@
                         </div>
                     </div>
 
-                    <div class="association">
+                    <div
+                        *ngIf="ShowAssociation"
+                        class="association"
+                    >
                         {{ Word.association }}
                     </div>
                 </div>

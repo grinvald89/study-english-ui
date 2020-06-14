@@ -31,6 +31,7 @@ export class WordsStudyPageComponent implements OnInit, OnDestroy {
     private answers: TranslateDTO[] = [];
     private rightAnswer: TranslateDTO;
     private dailyStatistics: DailyStatistics[] = MOCK_DAILY_STATISTICS;
+    private showAssociation: boolean = false;
 
     get Loaded(): boolean {
         return this.loaded;
@@ -68,6 +69,13 @@ export class WordsStudyPageComponent implements OnInit, OnDestroy {
     }
     set DailyStatistics(value: DailyStatistics[]) {
         this.dailyStatistics = value;
+    }
+
+    get ShowAssociation(): boolean {
+        return this.showAssociation;
+    }
+    set ShowAssociation(value: boolean) {
+        this.showAssociation = value;
     }
 
     constructor(
