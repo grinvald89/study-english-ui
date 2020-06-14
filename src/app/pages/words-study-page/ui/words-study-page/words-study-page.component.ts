@@ -41,6 +41,7 @@ export class WordsStudyPageComponent implements OnInit, OnDestroy {
     }
     set Word(value: WordDTO) {
         this.word = value;
+        this.updateAnswers();
     }
 
     get Answers(): TranslateDTO[] {
@@ -89,5 +90,23 @@ export class WordsStudyPageComponent implements OnInit, OnDestroy {
                 finalize(() => this.Loaded = true)
             )
             .subscribe(res => this.Word = res);
+    }
+
+    /**
+     * Обновляет варианты ответа
+     */
+    private updateAnswers(): void {
+        if (!this.Word || !this.Word.id) {
+            return;
+        }
+
+        this.Loaded = false;
+
+        this.wordsService.getAnswersByWordId(this.Word.id)
+            .pipe(
+                takeUntil(this.destructor$),
+                finalize(() => this.Loaded = true)
+            )
+            .subscribe(res => this.Answers = res);
     }
 }
