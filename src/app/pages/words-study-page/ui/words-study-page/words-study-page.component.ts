@@ -5,13 +5,13 @@ import swal from 'sweetalert2';
 
 import { WordDTO } from 'src/app/shared/models/word-dto/word-dto';
 import { TranslateDTO } from 'src/app/shared/models/translate-dto/translate-dto';
-import { DailyStatistics } from 'src/statistics/daily-statistics/data/models/daily-statistics/daily-statistics';
+import { DailyStatisticsDTO } from 'src/app/shared/models/daily-statistics-dto/daily-statistics-dto';
 
 import { MOCK_WORD } from './mocks/mock-word';
 import { MOCK_ANSWERS } from './mocks/mock-answers';
-import { MOCK_DAILY_STATISTICS } from './mocks/mock-daily-statistics';
 import { WordsService } from '../../data/words.service';
 import { PercentPipe } from 'src/app/shared/pipes/percent.pipe';
+import { DailyStatisticsService } from '../../data/daily-statistics.service';
 
 const COUNT_ANSWERS: number = 10;
 
@@ -31,7 +31,7 @@ export class WordsStudyPageComponent implements OnInit, OnDestroy {
     private word: WordDTO;
     private answers: TranslateDTO[] = [];
     private rightAnswer: TranslateDTO;
-    private dailyStatistics: DailyStatistics[] = MOCK_DAILY_STATISTICS;
+    private dailyStatistics: DailyStatisticsDTO[] = [];
     private showAssociation: boolean = false;
 
     get Loaded(): boolean {
@@ -49,6 +49,7 @@ export class WordsStudyPageComponent implements OnInit, OnDestroy {
         this.word = value;
         this.updateAnswers();
         this.updateRightAnswer();
+        this.changeDetector.detectChanges();
     }
 
     get Answers(): TranslateDTO[] {
@@ -65,11 +66,12 @@ export class WordsStudyPageComponent implements OnInit, OnDestroy {
         this.rightAnswer = value;
     }
 
-    get DailyStatistics(): DailyStatistics[] {
+    get DailyStatistics(): DailyStatisticsDTO[] {
         return this.dailyStatistics;
     }
-    set DailyStatistics(value: DailyStatistics[]) {
+    set DailyStatistics(value: DailyStatisticsDTO[]) {
         this.dailyStatistics = value;
+        this.changeDetector.detectChanges();
     }
 
     get WordCorrectAnswers(): number {
@@ -92,6 +94,7 @@ export class WordsStudyPageComponent implements OnInit, OnDestroy {
 
     constructor(
         private readonly wordsService: WordsService,
+        private readonly dailyStatisticsService: DailyStatisticsService,
         private readonly changeDetector: ChangeDetectorRef,
         private readonly percentPipe: PercentPipe
     ) { }
@@ -101,6 +104,7 @@ export class WordsStudyPageComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.loadRandomWord();
+        this.loadDailyStatistics();
     }
 
     /**
@@ -143,6 +147,15 @@ export class WordsStudyPageComponent implements OnInit, OnDestroy {
                 finalize(() => this.Loaded = true)
             )
             .subscribe(res => this.Word = res);
+    }
+
+    /**
+     * Загружает дневную статистику
+     */
+    private loadDailyStatistics(): void {
+        this.dailyStatisticsService.getDailyStatistics()
+            .pipe(takeUntil(this.destructor$))
+            .subscribe(res => this.DailyStatistics = res);
     }
 
     /**

@@ -1,8 +1,8 @@
 <div class="daily-statistics">
     <div
         *ngFor="let item of DailyStatistics"
-        [ngClass]="{ 'daily-statistics__item': true, 'daily-statistics__item--success': item.success }"
-        [matTooltip]="item.date + ' (' + item.date + ')'"
+        [ngClass]="{ 'daily-statistics__item': true, 'daily-statistics__item--success': item.studyHistory.correct }"
+        [matTooltip]="item.word.text + ' (' + item.time + ')'"
         matTooltipHideDelay="100"
         #tooltip="matTooltip"
         matTooltipPosition="above"

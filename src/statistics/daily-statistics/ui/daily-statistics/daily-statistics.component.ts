@@ -1,9 +1,10 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import * as moment from 'moment';
 
-import { DailyStatistics } from '../../data/models/daily-statistics/daily-statistics';
+import { DailyStatisticsDTO } from 'src/app/shared/models/daily-statistics-dto/daily-statistics-dto';
 
 /**
- * Компонент для отображения статистики в графическом виде
+ * Компонент для отображения дневной статистики
  */
 @Component({
     selector: 'statistics_daily-statistics',
@@ -11,19 +12,15 @@ import { DailyStatistics } from '../../data/models/daily-statistics/daily-statis
     styleUrls: ['./daily-statistics.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DailyStatisticsComponent implements OnInit {
-    private dailyStatistics: DailyStatistics[] = [];
+export class DailyStatisticsComponent {
+    private dailyStatistics: DailyStatisticsDTO[] = [];
 
     @Input('DailyStatistics')
-    get DailyStatistics(): DailyStatistics[] {
+    get DailyStatistics(): DailyStatisticsDTO[] {
         return this.dailyStatistics;
     }
-    set DailyStatistics(value: DailyStatistics[]) {
+    set DailyStatistics(value: DailyStatisticsDTO[]) {
+        value.forEach(c => c.time = moment(c.studyHistory.date).format('HH:mm:ss'));
         this.dailyStatistics = value;
-    }
-
-    constructor() { }
-
-    ngOnInit() {
     }
 }

@@ -17,5 +17,5 @@ export interface IStudyHistoryDTO {
     /**
      * Дата ответа
      */
-    dateTime: moment.Moment;
+    date: moment.Moment;
 }
