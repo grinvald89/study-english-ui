@@ -11,6 +11,7 @@ import { MOCK_WORD } from './mocks/mock-word';
 import { MOCK_ANSWERS } from './mocks/mock-answers';
 import { MOCK_DAILY_STATISTICS } from './mocks/mock-daily-statistics';
 import { WordsService } from '../../data/words.service';
+import { PercentPipe } from 'src/app/shared/pipes/percent.pipe';
 
 const COUNT_ANSWERS: number = 10;
 
@@ -71,6 +72,10 @@ export class WordsStudyPageComponent implements OnInit, OnDestroy {
         this.dailyStatistics = value;
     }
 
+    get WordCorrectness(): string {
+        return this.percentPipe.transform(this.Word.statistics.correctness);
+    }
+
     get ShowAssociation(): boolean {
         return this.showAssociation;
     }
@@ -80,7 +85,8 @@ export class WordsStudyPageComponent implements OnInit, OnDestroy {
 
     constructor(
         private readonly wordsService: WordsService,
-        private readonly changeDetector: ChangeDetectorRef
+        private readonly changeDetector: ChangeDetectorRef,
+        private readonly percentPipe: PercentPipe
     ) { }
 
     /**
