@@ -129,7 +129,7 @@ export class WordsStudyPageComponent implements OnInit, OnDestroy {
 
     /**
      * Выбрать вариант ответа
-     * @param index - индекс выбранного варианта ответа
+     * @param answer - выбранный вариант ответа
      */
     public selectAnswer(answer: TranslateDTO): void {
         if (this.Word.id === undefined) {
