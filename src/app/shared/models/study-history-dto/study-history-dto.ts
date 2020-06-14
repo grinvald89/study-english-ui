@@ -1,3 +1,5 @@
+import * as moment from 'moment';
+
 import { IStudyHistoryDTO } from './study-history-dto.interface';
 
 /**

@@ -12,6 +12,7 @@ import { MOCK_ANSWERS } from './mocks/mock-answers';
 import { WordsService } from '../../data/words.service';
 import { PercentPipe } from 'src/app/shared/pipes/percent.pipe';
 import { DailyStatisticsService } from '../../data/daily-statistics.service';
+import { StudyHistoryDTO } from 'src/app/shared/models/study-history-dto/study-history-dto';
 
 const COUNT_ANSWERS: number = 10;
 
@@ -132,7 +133,10 @@ export class WordsStudyPageComponent implements OnInit, OnDestroy {
                 takeUntil(this.destructor$),
                 finalize(() => this.Loaded = true)
             )
-            .subscribe(_ => this.loadRandomWord());
+            .subscribe(studyHistory => {
+                this.localUpdateDailyStatistics(studyHistory);
+                this.loadRandomWord();
+            });
     }
 
     /**
@@ -191,6 +195,19 @@ export class WordsStudyPageComponent implements OnInit, OnDestroy {
         } else {
             this.RightAnswer = rightAnswer;
         }
+    }
+
+    /**
+     * Обновляет дневную статистику локально, на основе данных из компонента
+     */
+    private localUpdateDailyStatistics(history: StudyHistoryDTO): void {
+        const newDailyStatisticsItem = new DailyStatisticsDTO({
+            word: this.Word,
+            studyHistory: history
+        });
+
+        this.DailyStatistics.push(newDailyStatisticsItem);
+        this.DailyStatistics = this.DailyStatistics;
     }
 
     /**
