@@ -1,5 +1,7 @@
 import { TranslateDTO } from '../translate-dto/translate-dto';
 import { AudioDTO } from '../audio-dto/audio-dto';
+import { StaticticsDTO } from '../statictics-dto/statictics-dto';
+import { StudyHistoryDTO } from '../study-history-dto/study-history-dto';
 
 /**
  * Описывает параметры слова.
@@ -34,4 +36,14 @@ export interface IWordDTO {
      * Аудио-файлы
      */
     audio: AudioDTO[];
+
+    /**
+     * Статистика по изучению слова
+     */
+    statistics: StaticticsDTO;
+
+    /**
+     * История изучения слова
+     */
+    studyHistory: StudyHistoryDTO;
 }

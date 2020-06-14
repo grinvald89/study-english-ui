@@ -3,7 +3,7 @@ import * as moment from 'moment';
 /**
  * Хранит историю изучения слова
  */
-export interface IStudyHistory {
+export interface IStudyHistoryDTO {
     /**
      * Идентификатор
      */
