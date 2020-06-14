@@ -15,6 +15,7 @@ import { DailyStatisticsService } from '../../data/daily-statistics.service';
 import { StudyHistoryDTO } from 'src/app/shared/models/study-history-dto/study-history-dto';
 
 const COUNT_ANSWERS: number = 10;
+const INIT_AUDIO_FILE_INDEX: number = 0;
 
 /**
  * Компонент для отображения страницы изучения слов
@@ -34,6 +35,7 @@ export class WordsStudyPageComponent implements OnInit, OnDestroy {
     private rightAnswer: TranslateDTO;
     private dailyStatistics: DailyStatisticsDTO[] = [];
     private showAssociation: boolean = false;
+    private audioFileIndex: number = INIT_AUDIO_FILE_INDEX;
 
     get Loaded(): boolean {
         return this.loaded;
@@ -51,6 +53,7 @@ export class WordsStudyPageComponent implements OnInit, OnDestroy {
         this.updateAnswers();
         this.updateRightAnswer();
         this.ShowAssociation = false;
+        this.resetAudioFileIndex();
         this.changeDetector.detectChanges();
     }
 
@@ -92,6 +95,13 @@ export class WordsStudyPageComponent implements OnInit, OnDestroy {
     }
     set ShowAssociation(value: boolean) {
         this.showAssociation = value;
+    }
+
+    get AudioFileIndex(): number {
+        return this.audioFileIndex;
+    }
+    set AudioFileIndex(value: number) {
+        this.audioFileIndex = value;
     }
 
     constructor(
@@ -138,6 +148,21 @@ export class WordsStudyPageComponent implements OnInit, OnDestroy {
                 this.localUpdateDailyStatistics(studyHistory);
                 this.loadRandomWord();
             });
+    }
+
+    /**
+     * Воспроизвести audio-файл
+     */
+    public playAudioFile(isSlow?: boolean): void {
+        const audio: HTMLAudioElement = new Audio(this.Word.audio[this.AudioFileIndex].url);
+
+        if (isSlow) {
+            audio.playbackRate = 0.5;
+        }
+
+        audio.play();
+
+        this.updateAudioFileIndex();
     }
 
     /**
@@ -212,6 +237,17 @@ export class WordsStudyPageComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Обновляет индекс audio-файла
+     */
+    private updateAudioFileIndex(): void {
+        if (this.AudioFileIndex + 1 >= this.Word.audio.length) {
+            this.AudioFileIndex = 0;
+        } else {
+            this.AudioFileIndex = this.AudioFileIndex + 1;
+        }
+    }
+
+    /**
      * Вставляет правильный вариант ответа в список ответов и возвращает новый список ответов
      */
     private insertRightAnswerInAnwerList(answerList: TranslateDTO[]): TranslateDTO[] {
@@ -226,5 +262,12 @@ export class WordsStudyPageComponent implements OnInit, OnDestroy {
         result = result.concat(secondHalfAnswers);
 
         return result;
+    }
+
+    /**
+     * Сбрасывает индекс audio-файла в дефолтное значение
+     */
+    private resetAudioFileIndex(): void {
+        this.AudioFileIndex = INIT_AUDIO_FILE_INDEX;
     }
 }
