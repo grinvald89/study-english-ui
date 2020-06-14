@@ -22,7 +22,7 @@ import { WORDS } from '../../data/words';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddWordPageComponent implements OnInit, OnDestroy {
-    private loaded: boolean = false;
+    private loaded: boolean = true;
     private word: WordDTO = new WordDTO();
     private translates: string[] = [];
 
@@ -99,12 +99,12 @@ export class AddWordPageComponent implements OnInit, OnDestroy {
      * Отправляет слово на сервер
      */
     public sendWord(): void {
-        this.Loaded = true;
+        this.Loaded = false;
 
         this.wordsService.addWord(this.Word)
             .pipe(
                 takeUntil(this.destructor$),
-                finalize(() => this.Loaded = false)
+                finalize(() => this.Loaded = true)
             )
             .subscribe(
                 word => this.Word = word,
