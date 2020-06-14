@@ -28,7 +28,7 @@ export class AppComponent implements OnDestroy {
     ) {
         this.appConfigService.init()
             .pipe(takeUntil(this.destructor$))
-            .subscribe(_ => this.appConfigLoaded = true);
+            .subscribe(_ => this.AppConfigLoaded = true);
     }
 
     /**
