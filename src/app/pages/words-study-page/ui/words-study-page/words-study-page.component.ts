@@ -151,6 +151,27 @@ export class WordsStudyPageComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Пропустить слово, при этом в историю изучения будет записана ошибка
+     */
+    public skipWord(): void {
+        if (this.Word.id === undefined) {
+            return;
+        }
+
+        this.Loaded = false;
+
+        this.wordsService.sendAnswers(this.Word.id, false, this.ShowAssociation)
+            .pipe(
+                takeUntil(this.destructor$),
+                finalize(() => this.Loaded = true)
+            )
+            .subscribe(studyHistory => {
+                this.localUpdateDailyStatistics(studyHistory);
+                this.loadRandomWord();
+            });
+    }
+
+    /**
      * Воспроизвести audio-файл
      */
     public playAudioFile(isSlow?: boolean): void {
