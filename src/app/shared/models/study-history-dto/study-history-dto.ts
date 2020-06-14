@@ -4,7 +4,7 @@ import { IStudyHistoryDTO } from './study-history-dto.interface';
  * Хранит историю изучения слова
  */
 export class StudyHistoryDTO implements IStudyHistoryDTO {
-    readonly id: number;
+    readonly id?: number;
     correct: boolean;
     dateTime: moment.Moment;
 

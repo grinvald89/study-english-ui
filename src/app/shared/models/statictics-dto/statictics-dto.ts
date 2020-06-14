@@ -4,7 +4,7 @@ import { IStaticticsDTO } from './statictics-dto.interface';
  * Хранит статистику по изучению слова
  */
 export class StaticticsDTO implements IStaticticsDTO {
-    readonly id: number;
+    readonly id?: number;
     countShow: number;
     correctness: number;
     dateLastShow: moment.Moment;

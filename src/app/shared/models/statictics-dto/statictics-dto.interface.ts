@@ -7,7 +7,7 @@ export interface IStaticticsDTO {
     /**
      * Идентификатор
      */
-    readonly id: number;
+    readonly id?: number;
 
     /**
      * Количество показов

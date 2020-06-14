@@ -7,7 +7,7 @@ export interface IStudyHistoryDTO {
     /**
      * Идентификатор
      */
-    readonly id: number;
+    readonly id?: number;
 
     /**
      * True, если ответ был правильный
