@@ -1,6 +1,6 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Subject, Observable } from 'rxjs';
+import { takeUntil, finalize } from 'rxjs/operators';
 
 import { WordDTO } from 'src/app/shared/models/word-dto/word-dto';
 import { TranslateDTO } from 'src/app/shared/models/translate-dto/translate-dto';
@@ -21,11 +21,11 @@ import { WordsService } from '../../data/words.service';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WordsStudyPageComponent implements OnInit, OnDestroy {
+    private destructor$: Subject<boolean> = new Subject<boolean>();
+
     private word: WordDTO = MOCK_WORD;
     private answers: TranslateDTO[] = MOCK_ANSWERS;
     private dailyStatistics: DailyStatistics[] = MOCK_DAILY_STATISTICS;
-    private destructor$: Subject<boolean> = new Subject<boolean>();
-
 
     get Word(): WordDTO {
         return this.word;
@@ -48,15 +48,16 @@ export class WordsStudyPageComponent implements OnInit, OnDestroy {
         this.dailyStatistics = value;
     }
 
-    constructor(private readonly wordsService: WordsService) { }
+    constructor(
+        private readonly wordsService: WordsService,
+        private readonly changeDetector: ChangeDetectorRef
+    ) { }
 
     /**
      * Инициализация компонента
      */
     ngOnInit() {
-        this.wordsService.getWord()
-            .pipe(takeUntil(this.destructor$))
-            .subscribe(res => console.log(res));
+        this.updateWord();
     }
 
     /**
@@ -65,5 +66,14 @@ export class WordsStudyPageComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destructor$.next(true);
         this.destructor$.complete();
+    }
+
+    /**
+     * Обновляет слово
+     */
+    private updateWord(): void {
+        this.wordsService.getRandomWord()
+            .pipe(takeUntil(this.destructor$))
+            .subscribe(res => this.Word = res);
     }
 }

@@ -21,8 +21,7 @@ export class WordsService {
     /**
      * Возращает слово
      */
-    public getWord(): Observable<WordDTO> {
-        // return this.http.get<WordDTO>(`${this.Url}api/words`);
-        return this.http.get<WordDTO>(`${this.Url}api/word`);
+    public getRandomWord(): Observable<WordDTO> {
+        return this.http.get<WordDTO>(`${this.Url}api/randomword`);
     }
 }
