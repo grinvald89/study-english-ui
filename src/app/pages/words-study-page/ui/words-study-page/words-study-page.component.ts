@@ -23,9 +23,18 @@ import { WordsService } from '../../data/words.service';
 export class WordsStudyPageComponent implements OnInit, OnDestroy {
     private destructor$: Subject<boolean> = new Subject<boolean>();
 
-    private word: WordDTO = MOCK_WORD;
-    private answers: TranslateDTO[] = MOCK_ANSWERS;
+    private loaded: boolean = false;
+    private word: WordDTO;
+    private answers: TranslateDTO[] = [];
     private dailyStatistics: DailyStatistics[] = MOCK_DAILY_STATISTICS;
+
+    get Loaded(): boolean {
+        return this.loaded;
+    }
+    set Loaded(value: boolean) {
+        this.loaded = value;
+        this.changeDetector.detectChanges();
+    }
 
     get Word(): WordDTO {
         return this.word;
@@ -72,8 +81,13 @@ export class WordsStudyPageComponent implements OnInit, OnDestroy {
      * Обновляет слово
      */
     private updateWord(): void {
+        this.Loaded = false;
+
         this.wordsService.getRandomWord()
-            .pipe(takeUntil(this.destructor$))
+            .pipe(
+                takeUntil(this.destructor$),
+                finalize(() => this.Loaded = true)
+            )
             .subscribe(res => this.Word = res);
     }
 }

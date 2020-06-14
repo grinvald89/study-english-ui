@@ -1,15 +1,16 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { takeUntil, finalize } from 'rxjs/operators';
 import { isEmpty } from 'lodash';
 import swal from 'sweetalert2';
 
 import { WordDTO } from 'src/app/shared/models/word-dto/word-dto';
-import { WordsService } from '../../data/words.service';
-import { FormValue } from './form-value/form-value';
 import { AudioDTO } from 'src/app/shared/models/audio-dto/audio-dto';
 import { TranslateDTO } from 'src/app/shared/models/translate-dto/translate-dto';
+import { FormValue } from './form-value/form-value';
+import { WordsService } from '../../data/words.service';
+import { WORDS } from '../../data/words';
 
 /**
  * Компонент для отображения страницы добавления слов
@@ -21,7 +22,7 @@ import { TranslateDTO } from 'src/app/shared/models/translate-dto/translate-dto'
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddWordPageComponent implements OnInit, OnDestroy {
-    private loading: boolean = false;
+    private loaded: boolean = false;
     private word: WordDTO = new WordDTO();
     private translates: string[] = [];
 
@@ -36,11 +37,11 @@ export class AddWordPageComponent implements OnInit, OnDestroy {
 
     private destructor$: Subject<boolean> = new Subject<boolean>();
 
-    get Loading(): boolean {
-        return this.loading;
+    get Loaded(): boolean {
+        return this.loaded;
     }
-    set Loading(value: boolean) {
-        this.loading = value;
+    set Loaded(value: boolean) {
+        this.loaded = value;
         this.changeDetector.detectChanges();
     }
 
@@ -75,6 +76,8 @@ export class AddWordPageComponent implements OnInit, OnDestroy {
      * Инициализация компонента
      */
     ngOnInit() {
+        // this.addWordsFromAppConst();
+
         this.Form.valueChanges
             .pipe(takeUntil(this.destructor$))
             .subscribe((formValue: FormValue) => {
@@ -96,12 +99,12 @@ export class AddWordPageComponent implements OnInit, OnDestroy {
      * Отправляет слово на сервер
      */
     public sendWord(): void {
-        this.Loading = true;
+        this.Loaded = true;
 
         this.wordsService.addWord(this.Word)
             .pipe(
                 takeUntil(this.destructor$),
-                finalize(() => this.Loading = false)
+                finalize(() => this.Loaded = false)
             )
             .subscribe(
                 word => this.Word = word,
@@ -197,5 +200,21 @@ export class AddWordPageComponent implements OnInit, OnDestroy {
         ) {
             this.Form.controls.privateTranslateIndex.setValue(0, { emitEvent: false });
         }
+    }
+
+    private addWordsFromAppConst(word?: WordDTO): void {
+        if (word === undefined) {
+            word = WORDS[0];
+        }
+
+        this.wordsService.addWord(word)
+            .pipe(takeUntil(this.destructor$))
+            .subscribe(res => {
+                const wordIndex: number = WORDS.findIndex(i => i.text === word?.text);
+
+                if (wordIndex < WORDS.length - 1) {
+                    this.addWordsFromAppConst(WORDS[wordIndex + 1]);
+                }
+            });
     }
 }

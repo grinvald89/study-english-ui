@@ -1,91 +1,100 @@
 <div class="words-study-page">
     <div class="container">
-        <div class="row header"></div>
+        <ng-container *ngIf="Loaded">
+            <div class="row header"></div>
 
-        <div class="row content">
-            <div class="col">
-                <div class="word">
-                    <div class="word__value">
-                        {{ Word.text }}
-                    </div>
-
-                    <div class="word__transcription">
-                        {{ Word.transcription }}
-                    </div>
-
-                    <div class="word__footer">
-                        <div class="word-controls">
-                            <span
-                                class="material-icons"
-                                matTooltip="Прослушать"
-                                matTooltipHideDelay="100"
-                                #tooltip="matTooltip"
-                                matTooltipPosition="above"
-                            >
-                                volume_up
-                            </span>
-                            <span
-                                class="material-icons"
-                                matTooltip="Замедленное воспроизведение"
-                                matTooltipHideDelay="100"
-                                #tooltip="matTooltip"
-                                matTooltipPosition="above"
-                            >
-                                slow_motion_video
-                            </span>
-                            <span
-                                class="material-icons"
-                                matTooltip="Пропустить"
-                                matTooltipHideDelay="100"
-                                #tooltip="matTooltip"
-                                matTooltipPosition="above"
-                            >
-                                fast_forward
-                            </span>
-                            <span
-                                class="material-icons"
-                                matTooltip="Просмотреть ассоциацию"
-                                matTooltipHideDelay="100"
-                                #tooltip="matTooltip"
-                                matTooltipPosition="above"
-                            >
-                                help
-                            </span>
+            <div class="row content">
+                <div class="col">
+                    <div class="word">
+                        <div class="word__value">
+                            {{ Word.text }}
                         </div>
 
+                        <div class="word__transcription">
+                            {{ Word.transcription }}
+                        </div>
+
+                        <div class="word__footer">
+                            <div class="word-controls">
+                                <span
+                                    class="material-icons"
+                                    matTooltip="Прослушать"
+                                    matTooltipHideDelay="100"
+                                    #tooltip="matTooltip"
+                                    matTooltipPosition="above"
+                                >
+                                    volume_up
+                                </span>
+                                <span
+                                    class="material-icons"
+                                    matTooltip="Замедленное воспроизведение"
+                                    matTooltipHideDelay="100"
+                                    #tooltip="matTooltip"
+                                    matTooltipPosition="above"
+                                >
+                                    slow_motion_video
+                                </span>
+                                <span
+                                    class="material-icons"
+                                    matTooltip="Пропустить"
+                                    matTooltipHideDelay="100"
+                                    #tooltip="matTooltip"
+                                    matTooltipPosition="above"
+                                >
+                                    fast_forward
+                                </span>
+                                <span
+                                    class="material-icons"
+                                    matTooltip="Просмотреть ассоциацию"
+                                    matTooltipHideDelay="100"
+                                    #tooltip="matTooltip"
+                                    matTooltipPosition="above"
+                                >
+                                    help
+                                </span>
+                            </div>
+
+                            <div
+                                class="word-statistics"
+                                matTooltip="28 %"
+                                matTooltipHideDelay="100"
+                                #tooltip="matTooltip"
+                                matTooltipPosition="above"
+                            >
+                                <span class="word-statistics__success">26</span>
+                                <span class="word-statistics__separator"> / </span>
+                                <span class="word-statistics__total">79</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="association">
+                        {{ Word.association }}
+                    </div>
+                </div>
+        
+                <div class="col">
+                    <div class="answers">
                         <div
-                            class="word-statistics"
-                            matTooltip="28 %"
-                            matTooltipHideDelay="100"
-                            #tooltip="matTooltip"
-                            matTooltipPosition="above"
+                            *ngFor="let answer of Answers"
+                            class="answers__button"
                         >
-                            <span class="word-statistics__success">26</span>
-                            <span class="word-statistics__separator"> / </span>
-                            <span class="word-statistics__total">79</span>
+                            {{ answer.text }}
                         </div>
                     </div>
                 </div>
-
-                <div class="association">
-                    {{ Word.association }}
-                </div>
             </div>
-    
-            <div class="col">
-                <div class="answers">
-                    <div
-                        *ngFor="let answer of Answers"
-                        class="answers__button"
-                    >
-                        {{ answer.text }}
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <div class="row daily-statistisc">
-            <statistics_daily-statistics [DailyStatistics]="DailyStatistics"></statistics_daily-statistics>
+            <div class="row daily-statistisc">
+                <statistics_daily-statistics [DailyStatistics]="DailyStatistics"></statistics_daily-statistics>
+            </div>
+        </ng-container>
+
+        <div
+            class="crums_loader"
+            *ngIf="!Loaded"
+        >
+            <mat-spinner></mat-spinner>
         </div>
     </div>
 </div>
