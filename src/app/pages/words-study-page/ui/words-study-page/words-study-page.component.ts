@@ -72,6 +72,13 @@ export class WordsStudyPageComponent implements OnInit, OnDestroy {
         this.dailyStatistics = value;
     }
 
+    get WordCorrectAnswers(): number {
+        if (!this.Word || !Array.isArray(this.Word.studyHistory)) {
+            return 0;
+        }
+        return this.Word.studyHistory.filter(i => i.correct).length;
+    }
+
     get WordCorrectness(): string {
         return this.percentPipe.transform(this.Word.statistics.correctness);
     }
