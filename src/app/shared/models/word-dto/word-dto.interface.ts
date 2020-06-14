@@ -45,5 +45,5 @@ export interface IWordDTO {
     /**
      * История изучения слова
      */
-    studyHistory: StudyHistoryDTO;
+    studyHistory: StudyHistoryDTO[];
 }

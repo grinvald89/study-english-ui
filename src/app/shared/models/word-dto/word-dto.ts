@@ -15,7 +15,7 @@ export class WordDTO implements IWordDTO {
     association: string;
     audio: AudioDTO[];
     statistics: StaticticsDTO;
-    studyHistory: StudyHistoryDTO;
+    studyHistory: StudyHistoryDTO[];
 
     constructor(data?: IWordDTO) {
         if (data) {

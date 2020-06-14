@@ -78,7 +78,7 @@ export class WordsStudyPageComponent implements OnInit, OnDestroy {
     /**
      * Инициализация компонента
      */
-    ngOnInit() {
+    public ngOnInit(): void {
         this.updateWord();
     }
 
@@ -88,6 +88,26 @@ export class WordsStudyPageComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destructor$.next(true);
         this.destructor$.complete();
+    }
+
+    /**
+     * Выбрать вариант ответа
+     * @param index - индекс выбранного варианта ответа
+     */
+    public selectAnswer(answer: TranslateDTO): void {
+        if (this.Word.id === undefined) {
+            return;
+        }
+
+        this.Loaded = false;
+
+        const isCorrect: boolean = answer.id === this.RightAnswer.id;
+        this.wordsService.sendAnswers(this.Word.id, isCorrect)
+            .pipe(
+                takeUntil(this.destructor$),
+                finalize(() => this.Loaded = true)
+            )
+            .subscribe(_ => _);
     }
 
     /**
