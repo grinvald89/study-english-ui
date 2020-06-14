@@ -100,7 +100,7 @@ export class WordsStudyPageComponent implements OnInit, OnDestroy {
      * Инициализация компонента
      */
     public ngOnInit(): void {
-        this.updateWord();
+        this.loadRandomWord();
     }
 
     /**
@@ -128,13 +128,13 @@ export class WordsStudyPageComponent implements OnInit, OnDestroy {
                 takeUntil(this.destructor$),
                 finalize(() => this.Loaded = true)
             )
-            .subscribe(_ => _);
+            .subscribe(_ => this.loadRandomWord());
     }
 
     /**
-     * Обновляет слово
+     * Загружает новое рандомное слово
      */
-    private updateWord(): void {
+    private loadRandomWord(): void {
         this.Loaded = false;
 
         this.wordsService.getRandomWord()
