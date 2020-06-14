@@ -11,6 +11,8 @@ import { MOCK_ANSWERS } from './mocks/mock-answers';
 import { MOCK_DAILY_STATISTICS } from './mocks/mock-daily-statistics';
 import { WordsService } from '../../data/words.service';
 
+const COUNT_ANSWERS: number = 10;
+
 /**
  * Компонент для отображения страницы изучения слов
  */
@@ -107,6 +109,28 @@ export class WordsStudyPageComponent implements OnInit, OnDestroy {
                 takeUntil(this.destructor$),
                 finalize(() => this.Loaded = true)
             )
-            .subscribe(res => this.Answers = res);
+            .subscribe(res => this.Answers = this.insertRightAnswerInAnwerList(res));
+    }
+
+    /**
+     * Вставляет правильный вариант ответа в список ответов и возвращает новый список ответов
+     */
+    private insertRightAnswerInAnwerList(answerList: TranslateDTO[]): TranslateDTO[] {
+        let result: TranslateDTO[] = [];
+        const rightAnswer = this.Word.translate.find(i => i.isPrimary);
+        const randomIndex: number = Math.floor(COUNT_ANSWERS * Math.random());
+
+        if (!rightAnswer) {
+            return result;
+        }
+
+        const firstHalfAnswers: TranslateDTO[] = answerList.slice(0, randomIndex);
+        const secondHalfAnswers: TranslateDTO[] = answerList.slice(randomIndex);
+
+        result = firstHalfAnswers;
+        result.push(rightAnswer);
+        result = result.concat(secondHalfAnswers);
+
+        return result;
     }
 }
