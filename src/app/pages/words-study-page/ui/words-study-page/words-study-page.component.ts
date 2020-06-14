@@ -50,6 +50,7 @@ export class WordsStudyPageComponent implements OnInit, OnDestroy {
         this.word = value;
         this.updateAnswers();
         this.updateRightAnswer();
+        this.ShowAssociation = false;
         this.changeDetector.detectChanges();
     }
 
