@@ -5,7 +5,7 @@ import { MaterialModule } from 'src/app/shared/material.module';
 import { DailyStatisticsComponent } from '../ui/daily-statistics/daily-statistics.component';
 
 /**
- * Модуль для отображения статистики в графическом виде
+ * Модуль для отображения дневной статистики
  */
 @NgModule({
     imports: [
