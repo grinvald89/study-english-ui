@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { Subject, Observable } from 'rxjs';
+import { Subject } from 'rxjs';
 import { takeUntil, finalize } from 'rxjs/operators';
+import swal from 'sweetalert2';
 
 import { WordDTO } from 'src/app/shared/models/word-dto/word-dto';
 import { TranslateDTO } from 'src/app/shared/models/translate-dto/translate-dto';
@@ -28,6 +29,7 @@ export class WordsStudyPageComponent implements OnInit, OnDestroy {
     private loaded: boolean = false;
     private word: WordDTO;
     private answers: TranslateDTO[] = [];
+    private rightAnswer: TranslateDTO;
     private dailyStatistics: DailyStatistics[] = MOCK_DAILY_STATISTICS;
 
     get Loaded(): boolean {
@@ -44,6 +46,7 @@ export class WordsStudyPageComponent implements OnInit, OnDestroy {
     set Word(value: WordDTO) {
         this.word = value;
         this.updateAnswers();
+        this.updateRightAnswer();
     }
 
     get Answers(): TranslateDTO[] {
@@ -51,6 +54,13 @@ export class WordsStudyPageComponent implements OnInit, OnDestroy {
     }
     set Answers(value: TranslateDTO[]) {
         this.answers = value;
+    }
+
+    get RightAnswer(): TranslateDTO {
+        return this.rightAnswer;
+    }
+    set RightAnswer(value: TranslateDTO) {
+        this.rightAnswer = value;
     }
 
     get DailyStatistics(): DailyStatistics[] {
@@ -113,22 +123,34 @@ export class WordsStudyPageComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Обновляет правильный ответ
+     */
+    private updateRightAnswer(): void {
+        const rightAnswer = this.Word.translate.find(i => i.isPrimary);
+
+        if (!rightAnswer) {
+            swal.fire(
+                'Ошибка!',
+                `Правильный вариант перевода для слова ${this.Word.text} не найден!`,
+                'error'
+            );
+        } else {
+            this.RightAnswer = rightAnswer;
+        }
+    }
+
+    /**
      * Вставляет правильный вариант ответа в список ответов и возвращает новый список ответов
      */
     private insertRightAnswerInAnwerList(answerList: TranslateDTO[]): TranslateDTO[] {
         let result: TranslateDTO[] = [];
-        const rightAnswer = this.Word.translate.find(i => i.isPrimary);
         const randomIndex: number = Math.floor(COUNT_ANSWERS * Math.random());
-
-        if (!rightAnswer) {
-            return result;
-        }
 
         const firstHalfAnswers: TranslateDTO[] = answerList.slice(0, randomIndex);
         const secondHalfAnswers: TranslateDTO[] = answerList.slice(randomIndex);
 
         result = firstHalfAnswers;
-        result.push(rightAnswer);
+        result.push(this.RightAnswer);
         result = result.concat(secondHalfAnswers);
 
         return result;
